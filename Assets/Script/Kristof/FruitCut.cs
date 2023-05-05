@@ -4,19 +4,27 @@ using UnityEngine;
 
 public class FruitCut : MonoBehaviour
 {
-    //public TMPText txt;
+    public GameObject whole;
+    public GameObject sliced;
 
-    void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "fruit") {
-            Destroy(collision.gameObject);
+    private Rigidbody fruitRigidbody;
+    private Collider fruitCollider;
+
+    private void onTriggerEnter(Collider other) {
+        if (other.CompareTag("Player")) {
+            Slice();
         }
-        
-        
-        
-        /*GameObject victim = collision.collider.gameObject;
-        GameObject[] pieces = BLINDED_AM_ME.MeshCut.Cut(victim, transform.position, transform.right, capMaterial);
-        if (!pieces[1].GetComponent<Rigidbody>())
-            pieces[1].AddComponent<Rigidbody>();
-        Destroy(pieces[1], 1);*/
+    }
+
+    private void Slice(/*Vector3 direction, Vector3 position, float force*/) {
+        whole.SetActive(false);
+        sliced.SetActive(true);
+        fruitCollider.enabled = false;
+
+        Rigidbody[] slices = sliced.GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody slice in slices){
+            slice.velocity = fruitRigidbody.velocity;
+
+        }
     }
 }
