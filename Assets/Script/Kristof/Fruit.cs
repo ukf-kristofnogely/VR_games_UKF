@@ -5,6 +5,7 @@ public class Fruit : MonoBehaviour
     public GameObject fruit;
     public GameObject whole;
     public GameObject sliced;
+    public GameObject b;
 
     private Rigidbody fruitRigidbody;
     private Collider fruitCollider;
@@ -33,8 +34,8 @@ public class Fruit : MonoBehaviour
         juiceEffect.Play();
 
         // Rotate based on the slice angle
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        sliced.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        sliced.transform.rotation = b.transform.rotation; //Quaternion.Euler(0f, 0f, angle);
 
         Rigidbody[] slices = sliced.GetComponentsInChildren<Rigidbody>();
 
@@ -50,8 +51,26 @@ public class Fruit : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Blade blade = other.GetComponent<Blade>();
-            Slice(blade.direction, blade.transform.position, blade.sliceForce);
+            //FindObjectOfType<GameManager>().IncreaseScore(points);
+
+            // Disable the whole fruit
+            fruitCollider.enabled = false;
+            whole.SetActive(false);
+
+            // Enable the sliced fruit
+            sliced.SetActive(true);
+            juiceEffect.Play();
+            sliced.transform.rotation = b.transform.rotation; //Quaternion.Euler(0f, 0f, angle);
+
+            Rigidbody[] slices = sliced.GetComponentsInChildren<Rigidbody>();
+
+            // Add a force to each slice based on the blade direction
+            foreach (Rigidbody slice in slices)
+            {
+                slice.velocity = fruitRigidbody.velocity;
+                //slice.AddForceAtPosition(direction * force, position, ForceMode.Impulse);
+            }
+
         }
     }
 

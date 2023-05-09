@@ -22,7 +22,7 @@ public class Blade : MonoBehaviour
         sliceCollider.enabled = true;
     }
 
-    private void ContinueSlice()
+    private void Update()
     {
         Vector3 newPosition = transform.position;
 
